@@ -1,0 +1,23 @@
+# File Managed by Puppet
+# Uncomment the line below to start Puppet Dashboard.
+START=yes
+
+# Location where puppetdashboard is installed:
+DASHBOARD_HOME=/usr/share/puppetdashboard
+
+# User which runs the puppetdashboard program:
+DASHBOARD_USER=<%= scope.lookupvar('puppetdashboard::process_user') %>
+
+# Ruby version to run the puppetdashboard as:
+DASHBOARD_RUBY=/usr/bin/ruby
+
+# Rails environment in which puppetdashboard runs:
+DASHBOARD_ENVIRONMENT=production
+
+# Network interface which puppetdashboard web server is running at:
+DASHBOARD_IFACE=0.0.0.0
+
+# Port on which puppetdashboard web server is running at, note that if the
+# puppetdashboard user is not root, it has to be a > 1024:
+DASHBOARD_PORT=<%= scope.lookupvar('puppetdashboard::port') %>
+
