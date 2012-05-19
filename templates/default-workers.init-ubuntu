@@ -1,6 +1,6 @@
 # File Managed by Puppet
 
-. /etc/default/puppetdashboard
+. /etc/default/puppet-dashboard
 
 START=yes
 

@@ -148,6 +148,9 @@
 # [*service*]
 #   The name of puppetdashboard service
 #
+# [*service_workers*]
+#   The name of puppet dashboard workers service
+#
 # [*service_status*]
 #   If the puppetdashboard service init script supports status argument
 #
@@ -243,6 +246,7 @@ class puppetdashboard (
   $audit_only          = params_lookup( 'audit_only' , 'global' ),
   $package             = params_lookup( 'package' ),
   $service             = params_lookup( 'service' ),
+  $service_workers     = params_lookup( 'service_workers' ),
   $service_status      = params_lookup( 'service_status' ),
   $process             = params_lookup( 'process' ),
   $process_args        = params_lookup( 'process_args' ),
@@ -355,6 +359,15 @@ class puppetdashboard (
   service { 'puppetdashboard':
     ensure     => $puppetdashboard::manage_service_ensure,
     name       => $puppetdashboard::service,
+    enable     => $puppetdashboard::manage_service_enable,
+    hasstatus  => $puppetdashboard::service_status,
+    pattern    => $puppetdashboard::process,
+    require    => [ Package['puppetdashboard'] , Class['puppetdashboard::mysql'] ],
+  }
+
+  service { 'puppetdashboard-workers':
+    ensure     => $puppetdashboard::manage_service_ensure,
+    name       => $puppetdashboard::service_workers,
     enable     => $puppetdashboard::manage_service_enable,
     hasstatus  => $puppetdashboard::service_status,
     pattern    => $puppetdashboard::process,

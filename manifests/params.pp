@@ -23,11 +23,15 @@ class puppetdashboard::params {
   ### Application related parameters
 
   $package = $::operatingsystem ? {
-    default => 'puppetdashboard',
+    default => 'puppet-dashboard',
   }
 
   $service = $::operatingsystem ? {
-    default => 'puppetdashboard',
+    default => 'puppet-dashboard',
+  }
+
+  $service_workers = $::operatingsystem ? {
+    default => 'puppet-dashboard-workers',
   }
 
   $service_status = $::operatingsystem ? {
@@ -39,7 +43,7 @@ class puppetdashboard::params {
   }
 
   $process_args = $::operatingsystem ? {
-    default => 'puppetdashboard',
+    default => 'puppet-dashboard',
   }
 
   $process_user = $::operatingsystem ? {
@@ -48,11 +52,11 @@ class puppetdashboard::params {
   }
 
   $config_dir = $::operatingsystem ? {
-    default => '/etc/puppetdashboard',
+    default => '/etc/puppet-dashboard',
   }
 
   $config_file = $::operatingsystem ? {
-    default => '/etc/puppetdashboard/database.yml',
+    default => '/etc/puppet-dashboard/database.yml',
   }
 
   $config_file_mode = $::operatingsystem ? {
@@ -68,24 +72,24 @@ class puppetdashboard::params {
   }
 
   $config_file_init = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => '/etc/default/puppetdashboard',
-    default                   => '/etc/sysconfig/puppetdashboard',
+    /(?i:Debian|Ubuntu|Mint)/ => '/etc/default/puppet-dashboard',
+    default                   => '/etc/sysconfig/puppet-dashboard',
   }
 
   $pid_file = $::operatingsystem ? {
-    default => '/var/run/puppetdashboard.pid',
+    default => '/var/run/puppet-dashboard.pid',
   }
 
   $data_dir = $::operatingsystem ? {
-    default => '/etc/puppetdashboard',
+    default => '/var/puppet-dashboard',
   }
 
   $log_dir = $::operatingsystem ? {
-    default => '/var/log/puppetdashboard',
+    default => '/var/log/puppet-dashboard',
   }
 
   $log_file = $::operatingsystem ? {
-    default => '/var/log/puppetdashboard/puppetdashboard.log',
+    default => '/var/log/puppet-dashboard/puppet-dashboard.log',
   }
 
   $port = '3000'
