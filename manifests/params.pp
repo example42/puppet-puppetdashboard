@@ -52,10 +52,14 @@ class puppetdashboard::params {
   }
 
   $config_dir = $::operatingsystem ? {
-    default => '/etc/puppet-dashboard',
+    default => '/usr/share/puppet-dashboard/config',
   }
 
   $config_file = $::operatingsystem ? {
+    default => '/usr/share/puppet-dashboard/config/settings.yml',
+  }
+
+  $config_file_db = $::operatingsystem ? {
     default => '/etc/puppet-dashboard/database.yml',
   }
 
@@ -100,7 +104,8 @@ class puppetdashboard::params {
   $source = ''
   $source_dir = ''
   $source_dir_purge = 'false'
-  $template = 'puppetdashboard/database.yml'
+  $template = 'puppetdashboard/settings.yml'
+  $template_db = 'puppetdashboard/database.yml'
   $options = ''
   $service_autorestart = true
   $version = 'present'

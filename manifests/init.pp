@@ -14,7 +14,15 @@
 #   User for production database
 #
 # [*db_password*]
-#  Password for production database
+#   Password for production database
+#
+# [*config_file_db*]
+#   Path of the database.yml configuration file.
+#   Its content (for the production environment) is base on the above
+#   parameters
+#
+# [*template_db*]
+#   A custom temlate file to use for the database.yml instead of the default
 #
 # Standard class parameters
 # Define the general class behaviour and customizations
@@ -222,6 +230,8 @@ class puppetdashboard (
   $db_name             = params_lookup( 'db_name' ),
   $db_user             = params_lookup( 'db_user' ),
   $db_password         = params_lookup( 'db_password' ),
+  $config_file_db      = params_lookup( 'config_file_db' ),
+  $template_db         = params_lookup( 'template_db' ),
   $my_class            = params_lookup( 'my_class' ),
   $source              = params_lookup( 'source' ),
   $source_dir          = params_lookup( 'source_dir' ),
@@ -384,6 +394,19 @@ class puppetdashboard (
     notify  => $puppetdashboard::manage_service_autorestart,
     source  => $puppetdashboard::manage_file_source,
     content => $puppetdashboard::manage_file_content,
+    replace => $puppetdashboard::manage_file_replace,
+    audit   => $puppetdashboard::manage_audit,
+  }
+
+  file { 'puppetdashboard.conf_db':
+    ensure  => $puppetdashboard::manage_file,
+    path    => $puppetdashboard::config_file_db,
+    mode    => $puppetdashboard::config_file_mode,
+    owner   => $puppetdashboard::config_file_owner,
+    group   => $puppetdashboard::config_file_group,
+    require => Package['puppetdashboard'],
+    notify  => $puppetdashboard::manage_service_autorestart,
+    content => template( "$puppetdashboard::template_db" ),
     replace => $puppetdashboard::manage_file_replace,
     audit   => $puppetdashboard::manage_audit,
   }
