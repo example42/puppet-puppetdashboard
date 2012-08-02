@@ -85,6 +85,7 @@ class puppetdashboard::params {
   }
 
   $data_dir = $::operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => '/usr/share/puppet-dashboard/',
     default => '/var/puppet-dashboard',
   }
 
