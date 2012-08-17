@@ -60,6 +60,7 @@ class puppetdashboard::params {
   }
 
   $config_file_db = $::operatingsystem ? {
+    /(?i:RedHat|Centos|Scientific)/ => '/usr/share/puppet-dashboard/config/database.yml',
     default => '/etc/puppet-dashboard/database.yml',
   }
 
