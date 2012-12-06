@@ -19,5 +19,6 @@ class puppetdashboard::mysql inherits puppetdashboard {
     require     => Mysql::Grant["puppetdashboard_grants_${fqdn}"], 
     refreshonly => true,
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    subscribe   => Package['puppetdashboard'],
   }
 }

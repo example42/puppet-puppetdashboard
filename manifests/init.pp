@@ -378,7 +378,6 @@ class puppetdashboard (
   package { 'puppetdashboard':
     ensure => $puppetdashboard::manage_package,
     name   => $puppetdashboard::package,
-    notify => Exec['puppetdashboard_dbmigrate'],
   }
 
   service { 'puppetdashboard':
