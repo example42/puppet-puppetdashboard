@@ -16,6 +16,7 @@ class puppetdashboard::params {
 
   ### Module's specific parameters
 
+  $setup_mysql = true
   $db_host = false
   $db_port = false
   $db_name = 'dashboard_production'

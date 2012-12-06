@@ -238,6 +238,7 @@ class puppetdashboard (
   $db_name             = params_lookup( 'db_name' ),
   $db_user             = params_lookup( 'db_user' ),
   $db_password         = params_lookup( 'db_password' ),
+  $setup_mysql         = params_lookup( 'setup_mysql' ),
   $config_file_db      = params_lookup( 'config_file_db' ),
   $template_db         = params_lookup( 'template_db' ),
   $my_class            = params_lookup( 'my_class' ),
@@ -283,6 +284,7 @@ class puppetdashboard (
   $protocol            = params_lookup( 'protocol' )
   ) inherits puppetdashboard::params {
 
+  $bool_setup_mysql=any2bool($setup_mysql)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_service_autorestart=any2bool($service_autorestart)
   $bool_absent=any2bool($absent)
@@ -364,8 +366,10 @@ class puppetdashboard (
     default   => template($puppetdashboard::template),
   }
 
-  ### MySql grants 
-  include puppetdashboard::mysql
+  ### MySQL grants
+  if $bool_setup_mysql {
+    include puppetdashboard::mysql
+  }
 
   ### Managed resources
   package { 'puppetdashboard':
@@ -419,7 +423,7 @@ class puppetdashboard (
     audit   => $puppetdashboard::manage_audit,
   }
 
-  # Enable service start on Ubuntu
+  # Enable service start on Debian and Ubuntu
   if $::operatingsystem == 'Ubuntu'
   or $::operatingsystem == 'Debian' {
     file { 'default-puppetdashboard':
