@@ -7,6 +7,12 @@
 #
 # Module specific parameters
 #
+# [*db_host*]
+#   Host of the production database
+#
+# [*db_port*]
+#   Port of the production database
+#
 # [*db_name*]
 #   Name of the production database
 #
@@ -227,6 +233,8 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class puppetdashboard (
+  $db_host             = params_lookup( 'db_host' ),
+  $db_port             = params_lookup( 'db_port' ),
   $db_name             = params_lookup( 'db_name' ),
   $db_user             = params_lookup( 'db_user' ),
   $db_password         = params_lookup( 'db_password' ),

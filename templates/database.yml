@@ -1,5 +1,11 @@
 # File Managed by Puppet
 production:
+<% if scope.lookupvar('puppetdashboard::db_host') -%>
+  host: <%= scope.lookupvar('puppetdashboard::db_host') %>
+<% end -%>
+<% if scope.lookupvar('puppetdashboard::db_port') -%>
+  port: <%= scope.lookupvar('puppetdashboard::db_port') %>
+<% end -%>
   database: <%= scope.lookupvar('puppetdashboard::db_name') %>
   username: <%= scope.lookupvar('puppetdashboard::db_user') %>
   password: <%= scope.lookupvar('puppetdashboard::db_password') %>
