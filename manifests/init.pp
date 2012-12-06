@@ -368,7 +368,10 @@ class puppetdashboard (
 
   ### MySQL grants
   if $bool_setup_mysql {
-    include puppetdashboard::mysql
+    class {
+      'puppetdashboard::mysql':
+        before => [Service['puppetdashboard'], Service['puppetdashboard-workers']];
+    }
   }
 
   ### Managed resources
@@ -384,7 +387,7 @@ class puppetdashboard (
     enable     => $puppetdashboard::manage_service_enable,
     hasstatus  => $puppetdashboard::service_status,
     pattern    => $puppetdashboard::process,
-    require    => [ Package['puppetdashboard'] , Class['puppetdashboard::mysql'] ],
+    require    => Package['puppetdashboard'],
   }
 
   service { 'puppetdashboard-workers':
@@ -393,7 +396,7 @@ class puppetdashboard (
     enable     => $puppetdashboard::manage_service_enable,
     hasstatus  => $puppetdashboard::service_status,
     pattern    => $puppetdashboard::process,
-    require    => [ Package['puppetdashboard'] , Class['puppetdashboard::mysql'] ],
+    require    => Package['puppetdashboard'],
   }
 
   file { 'puppetdashboard.conf':
