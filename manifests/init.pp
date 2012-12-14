@@ -7,6 +7,12 @@
 #
 # Module specific parameters
 #
+# [*db_host*]
+#   Host of the production database
+#
+# [*db_port*]
+#   Port of the production database
+#
 # [*db_name*]
 #   Name of the production database
 #
@@ -227,9 +233,12 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class puppetdashboard (
+  $db_host             = params_lookup( 'db_host' ),
+  $db_port             = params_lookup( 'db_port' ),
   $db_name             = params_lookup( 'db_name' ),
   $db_user             = params_lookup( 'db_user' ),
   $db_password         = params_lookup( 'db_password' ),
+  $setup_mysql         = params_lookup( 'setup_mysql' ),
   $config_file_db      = params_lookup( 'config_file_db' ),
   $template_db         = params_lookup( 'template_db' ),
   $my_class            = params_lookup( 'my_class' ),
@@ -275,6 +284,7 @@ class puppetdashboard (
   $protocol            = params_lookup( 'protocol' )
   ) inherits puppetdashboard::params {
 
+  $bool_setup_mysql=any2bool($setup_mysql)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_service_autorestart=any2bool($service_autorestart)
   $bool_absent=any2bool($absent)
@@ -356,14 +366,18 @@ class puppetdashboard (
     default   => template($puppetdashboard::template),
   }
 
-  ### MySql grants 
-  include puppetdashboard::mysql
+  ### MySQL grants
+  if $bool_setup_mysql {
+    class {
+      'puppetdashboard::mysql':
+        before => [Service['puppetdashboard'], Service['puppetdashboard-workers']];
+    }
+  }
 
   ### Managed resources
   package { 'puppetdashboard':
     ensure => $puppetdashboard::manage_package,
     name   => $puppetdashboard::package,
-    notify => Exec['puppetdashboard_dbmigrate'],
   }
 
   service { 'puppetdashboard':
@@ -372,7 +386,7 @@ class puppetdashboard (
     enable     => $puppetdashboard::manage_service_enable,
     hasstatus  => $puppetdashboard::service_status,
     pattern    => $puppetdashboard::process,
-    require    => [ Package['puppetdashboard'] , Class['puppetdashboard::mysql'] ],
+    require    => Package['puppetdashboard'],
   }
 
   service { 'puppetdashboard-workers':
@@ -381,7 +395,7 @@ class puppetdashboard (
     enable     => $puppetdashboard::manage_service_enable,
     hasstatus  => $puppetdashboard::service_status,
     pattern    => $puppetdashboard::process,
-    require    => [ Package['puppetdashboard'] , Class['puppetdashboard::mysql'] ],
+    require    => Package['puppetdashboard'],
   }
 
   file { 'puppetdashboard.conf':
@@ -411,7 +425,7 @@ class puppetdashboard (
     audit   => $puppetdashboard::manage_audit,
   }
 
-  # Enable service start on Ubuntu
+  # Enable service start on Debian and Ubuntu
   if $::operatingsystem == 'Ubuntu'
   or $::operatingsystem == 'Debian' {
     file { 'default-puppetdashboard':
