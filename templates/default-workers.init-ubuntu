@@ -7,4 +7,4 @@ START=yes
 #  Number of dashboard workers to start.  This will be the number of jobs that
 #  can be concurrently processed.  A simple recommendation would be to start
 #  with the number of cores you have available.
-NUM_DELAYED_JOB_WORKERS=2
+NUM_DELAYED_JOB_WORKERS=<%= processorcount %>
