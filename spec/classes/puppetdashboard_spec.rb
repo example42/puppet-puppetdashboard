@@ -126,11 +126,8 @@ describe 'puppetdashboard' do
     end
   end
 
-  describe 'Test service autorestart', :broken => true do
-    it 'should automatically restart the service, by default' do
-      content = catalogue.resource('file', 'puppetdashboard.conf').send(:parameters)[:notify]
-      content.should == 'Service[puppetdashboard]{:name=>"puppetdashboard"}'
-    end
+  describe 'Test service autorestart' do
+    it { should contain_file('puppetdashboard.conf').with_notify('Service[puppetdashboard]') }
   end
 
   describe 'Test service autorestart' do
