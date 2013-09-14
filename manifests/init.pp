@@ -425,7 +425,7 @@ class puppetdashboard (
     audit   => $puppetdashboard::manage_audit,
   }
 
-  # Enable service start on Debian and Ubuntu
+  # Enable service start on Debian and Ubuntu
   if $::operatingsystem == 'Ubuntu'
   or $::operatingsystem == 'Debian' {
     file { 'default-puppetdashboard':
