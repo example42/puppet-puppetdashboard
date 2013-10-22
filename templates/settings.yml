@@ -23,7 +23,7 @@ private_key_path: 'certs/dashboard.private_key.pem'
 public_key_path: 'certs/dashboard.public_key.pem'
 
 # Hostname of the certificate authority.
-ca_server: 'puppet'
+ca_server: '<%= @ca_server %>'
 
 # Port for the certificate authority.
 ca_port: 8140
@@ -32,20 +32,20 @@ ca_port: 8140
 key_length: 1024
 
 # The "inventory service" allows you to connect to a puppet master to retrieve and node facts
-enable_inventory_service: false
+enable_inventory_service: <%= @enable_inventory_service %>
 
 # Hostname of the inventory server.
-inventory_server: 'puppet'
+inventory_server: '<%= @inventory_server %>'
 
 # Port for the inventory server.
 inventory_port: 8140
 
 # Set this to true to allow Dashboard to display diffs on files that
 # are archived in the file bucket.
-use_file_bucket_diffs: false
+use_file_bucket_diffs: <%= @use_file_bucket_diffs %>
 
 # Hostname of the file bucket server.
-file_bucket_server: 'puppet'
+file_bucket_server: '<%= @filebucket_server %>'
 
 # Port for the file bucket server.
 file_bucket_port: 8140

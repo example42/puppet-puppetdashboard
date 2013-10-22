@@ -22,6 +22,21 @@
 # [*db_password*]
 #   Password for production database
 #
+# [*ca_server*]
+#   Specify CA server
+#
+# [*inventory_server*]
+#   Specify a unique inventory server
+#
+# [*enable_inventory_service*]
+#   Enable inventory service
+#
+# [*filebucket_server*]
+#   Specify a unique file bucket server
+#
+# [*use_file_bucket_diffs*]
+#   Enable file bucket diffs
+#
 # [*config_file_db*]
 #   Path of the database.yml configuration file.
 #   Its content (for the production environment) is base on the above
@@ -233,55 +248,60 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class puppetdashboard (
-  $db_host             = params_lookup( 'db_host' ),
-  $db_port             = params_lookup( 'db_port' ),
-  $db_name             = params_lookup( 'db_name' ),
-  $db_user             = params_lookup( 'db_user' ),
-  $db_password         = params_lookup( 'db_password' ),
-  $setup_mysql         = params_lookup( 'setup_mysql' ),
-  $config_file_db      = params_lookup( 'config_file_db' ),
-  $template_db         = params_lookup( 'template_db' ),
-  $my_class            = params_lookup( 'my_class' ),
-  $source              = params_lookup( 'source' ),
-  $source_dir          = params_lookup( 'source_dir' ),
-  $source_dir_purge    = params_lookup( 'source_dir_purge' ),
-  $template            = params_lookup( 'template' ),
-  $service_autorestart = params_lookup( 'service_autorestart' , 'global' ),
-  $options             = params_lookup( 'options' ),
-  $version             = params_lookup( 'version' ),
-  $absent              = params_lookup( 'absent' ),
-  $disable             = params_lookup( 'disable' ),
-  $disableboot         = params_lookup( 'disableboot' ),
-  $monitor             = params_lookup( 'monitor' , 'global' ),
-  $monitor_tool        = params_lookup( 'monitor_tool' , 'global' ),
-  $monitor_target      = params_lookup( 'monitor_target' , 'global' ),
-  $puppi               = params_lookup( 'puppi' , 'global' ),
-  $puppi_helper        = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall            = params_lookup( 'firewall' , 'global' ),
-  $firewall_tool       = params_lookup( 'firewall_tool' , 'global' ),
-  $firewall_src        = params_lookup( 'firewall_src' , 'global' ),
-  $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
-  $debug               = params_lookup( 'debug' , 'global' ),
-  $audit_only          = params_lookup( 'audit_only' , 'global' ),
-  $package             = params_lookup( 'package' ),
-  $service             = params_lookup( 'service' ),
-  $service_workers     = params_lookup( 'service_workers' ),
-  $service_status      = params_lookup( 'service_status' ),
-  $process             = params_lookup( 'process' ),
-  $process_args        = params_lookup( 'process_args' ),
-  $process_user        = params_lookup( 'process_user' ),
-  $config_dir          = params_lookup( 'config_dir' ),
-  $config_file         = params_lookup( 'config_file' ),
-  $config_file_mode    = params_lookup( 'config_file_mode' ),
-  $config_file_owner   = params_lookup( 'config_file_owner' ),
-  $config_file_group   = params_lookup( 'config_file_group' ),
-  $config_file_init    = params_lookup( 'config_file_init' ),
-  $pid_file            = params_lookup( 'pid_file' ),
-  $data_dir            = params_lookup( 'data_dir' ),
-  $log_dir             = params_lookup( 'log_dir' ),
-  $log_file            = params_lookup( 'log_file' ),
-  $port                = params_lookup( 'port' ),
-  $protocol            = params_lookup( 'protocol' )
+  $db_host                  = params_lookup( 'db_host' ),
+  $db_port                  = params_lookup( 'db_port' ),
+  $db_name                  = params_lookup( 'db_name' ),
+  $db_user                  = params_lookup( 'db_user' ),
+  $db_password              = params_lookup( 'db_password' ),
+  $ca_server                = params_lookup( 'ca_server' ),
+  $inventory_server         = params_lookup( 'inventory_server' ),
+  $enable_inventory_service = params_lookup( 'enable_inventory_service' ),
+  $filebucket_server        = params_lookup( 'filebucket_server' ),
+  $use_file_bucket_diffs    = params_lookup( 'use_file_bucket_diffs' ),
+  $setup_mysql              = params_lookup( 'setup_mysql' ),
+  $config_file_db           = params_lookup( 'config_file_db' ),
+  $template_db              = params_lookup( 'template_db' ),
+  $my_class                 = params_lookup( 'my_class' ),
+  $source                   = params_lookup( 'source' ),
+  $source_dir               = params_lookup( 'source_dir' ),
+  $source_dir_purge         = params_lookup( 'source_dir_purge' ),
+  $template                 = params_lookup( 'template' ),
+  $service_autorestart      = params_lookup( 'service_autorestart' , 'global' ),
+  $options                  = params_lookup( 'options' ),
+  $version                  = params_lookup( 'version' ),
+  $absent                   = params_lookup( 'absent' ),
+  $disable                  = params_lookup( 'disable' ),
+  $disableboot              = params_lookup( 'disableboot' ),
+  $monitor                  = params_lookup( 'monitor' , 'global' ),
+  $monitor_tool             = params_lookup( 'monitor_tool' , 'global' ),
+  $monitor_target           = params_lookup( 'monitor_target' , 'global' ),
+  $puppi                    = params_lookup( 'puppi' , 'global' ),
+  $puppi_helper             = params_lookup( 'puppi_helper' , 'global' ),
+  $firewall                 = params_lookup( 'firewall' , 'global' ),
+  $firewall_tool            = params_lookup( 'firewall_tool' , 'global' ),
+  $firewall_src             = params_lookup( 'firewall_src' , 'global' ),
+  $firewall_dst             = params_lookup( 'firewall_dst' , 'global' ),
+  $debug                    = params_lookup( 'debug' , 'global' ),
+  $audit_only               = params_lookup( 'audit_only' , 'global' ),
+  $package                  = params_lookup( 'package' ),
+  $service                  = params_lookup( 'service' ),
+  $service_workers          = params_lookup( 'service_workers' ),
+  $service_status           = params_lookup( 'service_status' ),
+  $process                  = params_lookup( 'process' ),
+  $process_args             = params_lookup( 'process_args' ),
+  $process_user             = params_lookup( 'process_user' ),
+  $config_dir               = params_lookup( 'config_dir' ),
+  $config_file              = params_lookup( 'config_file' ),
+  $config_file_mode         = params_lookup( 'config_file_mode' ),
+  $config_file_owner        = params_lookup( 'config_file_owner' ),
+  $config_file_group        = params_lookup( 'config_file_group' ),
+  $config_file_init         = params_lookup( 'config_file_init' ),
+  $pid_file                 = params_lookup( 'pid_file' ),
+  $data_dir                 = params_lookup( 'data_dir' ),
+  $log_dir                  = params_lookup( 'log_dir' ),
+  $log_file                 = params_lookup( 'log_file' ),
+  $port                     = params_lookup( 'port' ),
+  $protocol                 = params_lookup( 'protocol' )
   ) inherits puppetdashboard::params {
 
   $bool_setup_mysql=any2bool($setup_mysql)
