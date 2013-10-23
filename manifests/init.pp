@@ -440,7 +440,7 @@ class puppetdashboard (
     group   => $puppetdashboard::config_file_group,
     require => Package['puppetdashboard'],
     notify  => $puppetdashboard::manage_service_autorestart,
-    content => template( "$puppetdashboard::template_db" ),
+    content => template( $puppetdashboard::template_db ),
     replace => $puppetdashboard::manage_file_replace,
     audit   => $puppetdashboard::manage_audit,
   }

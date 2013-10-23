@@ -113,7 +113,7 @@ class puppetdashboard::params {
   $my_class = ''
   $source = ''
   $source_dir = ''
-  $source_dir_purge = 'false'
+  $source_dir_purge = false
   $template = 'puppetdashboard/settings.yml'
   $template_db = 'puppetdashboard/database.yml'
   $options = ''
