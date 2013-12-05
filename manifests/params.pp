@@ -29,6 +29,8 @@ class puppetdashboard::params {
   $filebucket_server = 'puppet'
   $use_file_bucket_diffs = false
 
+  $optimize_cron = false
+
   ### Application related parameters
 
   $package = $::operatingsystem ? {
