@@ -258,6 +258,7 @@ class puppetdashboard (
   $enable_inventory_service = params_lookup( 'enable_inventory_service' ),
   $filebucket_server        = params_lookup( 'filebucket_server' ),
   $use_file_bucket_diffs    = params_lookup( 'use_file_bucket_diffs' ),
+  $optimize_cron            = params_lookup( 'optimize_cron' ),
   $setup_mysql              = params_lookup( 'setup_mysql' ),
   $config_file_db           = params_lookup( 'config_file_db' ),
   $template_db              = params_lookup( 'template_db' ),
@@ -482,6 +483,18 @@ class puppetdashboard (
       purge   => $puppetdashboard::source_dir_purge,
       replace => $puppetdashboard::manage_file_replace,
       audit   => $puppetdashboard::manage_audit,
+    }
+  }
+
+  ### Database Optimization
+  if $puppetdashboard::optimize_cron == true {
+    cron { 'optimize-db':
+      ensure   => 'present',
+      command  => "cd ${data_dir} && /usr/bin/rake RAILS_ENV=production db:raw:optimize",
+      user     => 'root',
+      hour     => 2,
+      minute   => 30,
+      monthday => 1,
     }
   }
 
