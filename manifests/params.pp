@@ -30,6 +30,7 @@ class puppetdashboard::params {
   $use_file_bucket_diffs = false
 
   $optimize_cron = false
+  $clean_old_reports = false
 
   ### Application related parameters
 
