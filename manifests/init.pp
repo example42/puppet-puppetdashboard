@@ -37,6 +37,12 @@
 # [*use_file_bucket_diffs*]
 #   Enable file bucket diffs
 #
+# [*optimize_cron*]
+#   Enable DB optimization rake task
+#
+# [*clean_old_reports*]
+#   Clean up old reports
+#
 # [*config_file_db*]
 #   Path of the database.yml configuration file.
 #   Its content (for the production environment) is base on the above
@@ -259,6 +265,7 @@ class puppetdashboard (
   $filebucket_server        = params_lookup( 'filebucket_server' ),
   $use_file_bucket_diffs    = params_lookup( 'use_file_bucket_diffs' ),
   $optimize_cron            = params_lookup( 'optimize_cron' ),
+  $clean_old_reports        = params_lookup( 'clean_old_reports' ),
   $setup_mysql              = params_lookup( 'setup_mysql' ),
   $config_file_db           = params_lookup( 'config_file_db' ),
   $template_db              = params_lookup( 'template_db' ),
@@ -487,6 +494,7 @@ class puppetdashboard (
   }
 
   ### Database Optimization
+  ### TODO: Enable custom cron values
   if $puppetdashboard::optimize_cron == true {
     cron { 'optimize-db':
       ensure   => 'present',
@@ -498,6 +506,19 @@ class puppetdashboard (
     }
   }
 
+  ### Clean up old reports
+  ### Cleans up reports older then 3 months
+  ### TODO: Enable custom prune values
+  if $puppetdashboard::clean_old_reports == true {
+    cron { 'clean-reports':
+      ensure   => 'present',
+      command  => "cd ${data_dir} && /usr/bin/rake RAILS_ENV=production reports:prune upto=3 unit=mon",
+      user     => 'root',
+      hour     => 3,
+      minute   => 30,
+      monthday => 1,
+    }
+  }
 
   ### Include custom class if $my_class is set
   if $puppetdashboard::my_class {
