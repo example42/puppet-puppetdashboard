@@ -28,6 +28,7 @@ class puppetdashboard::params {
   $enable_inventory_service = false
   $filebucket_server = 'puppet'
   $use_file_bucket_diffs = false
+  $no_longer_reporting_cutoff = 3600
 
   $optimize_cron = false
   $clean_old_reports = false
