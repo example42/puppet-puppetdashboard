@@ -484,7 +484,7 @@ class puppetdashboard (
   }
 
   # The whole puppetdashboard configuration directory can be recursively overriden
-  if $puppetdashboard::source_dir {
+  if $puppetdashboard::source_dir and $puppetdashboard::source_dir != '' {
     file { 'puppetdashboard.dir':
       ensure  => directory,
       path    => $puppetdashboard::config_dir,
